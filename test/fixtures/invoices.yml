@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  value: 9.99
+  description: MyText
+  status: MyString
+  deadline: 2025-03-18 18:31:49
+
+two:
+  client: two
+  value: 9.99
+  description: MyText
+  status: MyString
+  deadline: 2025-03-18 18:31:49
