@@ -5,7 +5,8 @@ class CreateLegalCases < ActiveRecord::Migration[8.0]
       t.string :title
       t.text :description
       t.string :status
-      t.references :user, null: false, foreign_key: true
+      t.references :client, null: false, foreign_key: { to_table: :users } # Aponta para a tabela "users"
+      t.references :lawyer, null: false, foreign_key: { to_table: :users } # Também aponta para "users"
 
       t.timestamps
     end
