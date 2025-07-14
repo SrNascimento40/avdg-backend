@@ -40,6 +40,6 @@ class LegalCasesController < ApplicationController
     private
 
     def legal_case_params
-        params.require(:legal_case).permit(:title, :description, :status)
+        params.require(:legal_case).permit(:title, :description, :status, :client_id, :lawyer_id, :execution_date, :process_type)
     end
 end
