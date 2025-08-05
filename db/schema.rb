@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_13_235533) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_195935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,7 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_13_235533) do
   create_table "messages", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.bigint "receiver_id", null: false
-    t.bigint "legal_case_id", null: false
+    t.bigint "legal_case_id"
     t.text "content", null: false
     t.boolean "read", default: false
     t.datetime "created_at", null: false

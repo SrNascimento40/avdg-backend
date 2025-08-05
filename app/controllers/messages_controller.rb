@@ -1,23 +1,39 @@
 class MessagesController < ApplicationController
     def index
-        @messages = Message.all
-        render json: @messages
+        current_user = User.find(session[:user_id] || 3)
+
+        if params[:legal_case_id]
+            legal_case = LegalCase.find(params[:legal_case_id])
+            messages = legal_case.messages
+        else
+            messages = Message.where("sender_id = ? OR receiver_id = ?", current_user.id, current_user.id)
+        end
+      
+        render json: messages
     end
+      
 
     def show
-        @message = Message.find(params[:id])
+        legal_case = LegalCase.find(params[:legal_case_id])
+        @message = legal_case.messages
         render json: @message
     end
 
     def create
-        legal_case = LegalCase.find(params[:legal_case_id])
-        current_user = 1 # gamb pra rodar, depois mudar para current_user.id
-        receiver_id = current_user != legal_case.client_id ? legal_case.client_id : legal_case.lawyer_id
+        current_user = User.find(session[:user_id] || params[:message][:sender_id] || 1)
+        receiver_id = params[:message][:receiver_id]
+        
+        if params[:message][:legal_case_id].present? && LegalCase.exists?(params[:message][:legal_case_id])
+            legal_case = LegalCase.find(params[:message][:legal_case_id])
+        end
+        
         @message = Message.new(message_params.merge(
             sender_id: current_user,
             receiver_id: receiver_id,
-            legal_case_id: legal_case.id
-        ))
+            legal_case_id: legal_case.present? ? legal_case.id : nil
+            ))
+        @message.sender = current_user
+        
         if @message.save
             render json: @message, status: :created
         else

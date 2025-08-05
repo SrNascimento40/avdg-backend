@@ -9,7 +9,6 @@ class InvoicesController < ApplicationController
     end
   
     def create
-      byebug
       invoice = Invoice.new(invoice_params)
       if invoice.save
         render json: invoice, status: :created
