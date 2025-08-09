@@ -8,10 +8,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
       # local
-      # origins 'http://localhost:5173'
-
-      # PROD
-      origins 'https://advg-front-web-one.vercel.app'
+      origins 'http://localhost:5173', 'https://advg-front-web-one.vercel.app'
   
       resource '*',
         headers: :any,
@@ -20,4 +17,3 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
         credentials: true
     end
 end
-  
