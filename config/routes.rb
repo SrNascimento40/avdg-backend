@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     resources :change_logs, only: [:index, :create]
     resources :messages, only: [:index, :create]
   end
-  resources :messages, only: [:index, :create, :show, :update, :destroy]
+  resources :chats, only: [:index, :show, :create] do
+    resources :messages, only: [:index, :create]
+  end
+  
+  resources :messages, only: [:index, :create, :show, :update, :destroy, :destroy_all]
   resources :notifications, only: [:index, :update]
   resources :invoices, only: [:index, :show, :create, :update, :destroy] do
     resources :payments, only: [:index, :show, :create, :update, :destroy]

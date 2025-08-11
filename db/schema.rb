@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_16_195935) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_10_230131) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_195935) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["legal_case_id"], name: "index_change_logs_on_legal_case_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.bigint "user_one_id", null: false
+    t.bigint "user_two_id", null: false
+    t.datetime "last_message_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_one_id", "user_two_id"], name: "index_chats_on_user_one_id_and_user_two_id", unique: true
+    t.index ["user_one_id"], name: "index_chats_on_user_one_id"
+    t.index ["user_two_id"], name: "index_chats_on_user_two_id"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -57,6 +68,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_195935) do
     t.boolean "read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "chat_id"
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["legal_case_id"], name: "index_messages_on_legal_case_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -100,9 +113,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_195935) do
   end
 
   add_foreign_key "change_logs", "legal_cases"
+  add_foreign_key "chats", "users", column: "user_one_id"
+  add_foreign_key "chats", "users", column: "user_two_id"
   add_foreign_key "invoices", "users"
   add_foreign_key "legal_cases", "users", column: "client_id"
   add_foreign_key "legal_cases", "users", column: "lawyer_id"
+  add_foreign_key "messages", "chats"
   add_foreign_key "messages", "legal_cases"
   add_foreign_key "messages", "users", column: "receiver_id"
   add_foreign_key "messages", "users", column: "sender_id"
