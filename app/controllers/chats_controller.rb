@@ -16,5 +16,5 @@ class ChatsController < ApplicationController
       chat = Chat.find_or_create_between(current_user.id, receiver_id)
       render json: chat, status: :created
     end
-  end
+end
   

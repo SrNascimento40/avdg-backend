@@ -1,17 +1,24 @@
 class MessagesController < ApplicationController
+  before_action :authenticate_user!
 
     def index
-        if params[:chat_id]
-          messages = Message.where(chat_id: params[:chat_id]).order(created_at: :asc)
-        elsif params[:legal_case_id]
-          legal_case = LegalCase.find(params[:legal_case_id])
-          messages = legal_case.messages
-        else
-          current_user = User.find(session[:user_id] || 3)
-          messages = Message.where("sender_id = ? OR receiver_id = ?", current_user.id, current_user.id)
+      if params[:chat_id]
+        chat = Chat.find(params[:chat_id])
+        unless [chat.user_one_id, chat.user_two_id].include?(@current_user.id)
+        render json: { error: "Access denied" }, status: :forbidden
+        return
         end
+
+        messages = Message.where(chat_id: params[:chat_id]).order(created_at: :asc)
+      elsif params[:legal_case_id]
+        legal_case = LegalCase.find(params[:legal_case_id])
+        messages = legal_case.messages
+      else
+        current_user = User.find(session[:user_id] || 3)
+        messages = Message.where("sender_id = ? OR receiver_id = ?", current_user.id, current_user.id)
+      end
       
-        render json: messages
+      render json: messages
     end
 
     def show
