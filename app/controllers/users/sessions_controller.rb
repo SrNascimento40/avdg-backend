@@ -3,6 +3,8 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
   before_action :configure_sign_up_params, only: [:create]
+  skip_before_action :authenticate_user_from_token!, only: [:create]
+
 
   # Permitir parâmetros extras na criação de conta
   def configure_sign_up_params

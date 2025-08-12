@@ -2,6 +2,8 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
+  skip_before_action :authenticate_user_from_token!, only: [:create]
+
 
   def create
     user = User.new(sign_up_params)
