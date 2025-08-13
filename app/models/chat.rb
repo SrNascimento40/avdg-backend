@@ -18,6 +18,10 @@ class Chat < ApplicationRecord
     find_or_create_by!(user_one_id: a, user_two_id: b)
   end
 
+  def users
+    User.where(id: [user_one_id, user_two_id])
+  end
+
   private
 
   def normalize_users
